@@ -1,0 +1,50 @@
+@import url('https://fonts.googleapis.com/css2?family=ADLaM+Display&family=Tilt+Neon&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: #1a1a2e;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'DM Sans', sans-serif;
+}
+
+.header {
+    font-family: 'Tilt Neon';
+    font-size: 2rem;
+    font-weight: 600;
+    color: #e8e0ff;
+    letter-spacing: 0.5px;
+    padding: 8px 24px 16px;
+    position: relative;
+    text-shadow: 0 0 20px rgb(79, 56, 231);
+}
+
+.canvasContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    padding: 32px;
+    background: #16213e;
+    border-radius: 20px;
+}
+
+#container {
+    width: 90vw;
+    height: 80vh;
+    background: linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+    #0f0f1a;
+    background-size: 28px 28px;
+    border-radius: 0;
+    cursor: crosshair;
+    position: relative;
+    overflow: hidden;
+}
