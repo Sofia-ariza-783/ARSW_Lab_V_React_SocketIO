@@ -1,11 +1,11 @@
 import './App.css';
-import {useEffect, useRef, useState} from 'react';
+import {useEffect, useRef} from 'react';
 import p5 from "p5";
-import {Brush} from "lucide";
+import {io} from "socket.io-client";
 
 function App() {
-    const [lineWidth, setLineWidth] = useState(5);
     const myp5 = useRef(null);
+    const socket = useRef(null);
 
     const sketch = function (p) {
         let lastX, lastY;
@@ -14,7 +14,7 @@ function App() {
         p.setup = function () {
             let color = p.color(p.random(255),p.random(255), p.random(255));
             p.createCanvas(window.innerWidth, window.innerHeight);
-            p.strokeWeight(lineWidth);
+            p.strokeWeight(5);
             picker = p.createColorPicker(color);
             picker.position(10, 10);
         }
@@ -28,7 +28,12 @@ function App() {
                 }
 
                 p.stroke(picker.color());
-                p.line(lastX, lastY, p.mouseX, p.mouseY)
+                p.line(lastX, lastY, p.mouseX, p.mouseY);
+
+                if (socket.current) {
+                    socket.current.emit('drawEvent', {type: 'draw',x1: lastX,y1: lastY, x2: p.mouseX, y2: p.mouseY, color: picker.color().toString() });
+                }
+
                 lastY = p.mouseY;
                 lastX = p.mouseX;
             } else {
@@ -39,13 +44,28 @@ function App() {
     };
 
     useEffect(() => {
+        socket.current = io('http://localhost:9092');
+        socket.current.on('drawBroadcast', (data) => {
+            if (data.type === 'draw') {
+                myp5.current.stroke(data.color);
+                myp5.current.line(data.x1, data.y1, data.x2, data.y2);
+            } else if (data.type === 'clear') {
+                myp5.current.clear();
+            }
+        });
+
         if (!myp5.current) {
-            myp5.current = new p5(sketch,"container");
+            myp5.current = new p5(sketch, "container");
         }
+
+        return () => {
+            socket.current.disconnect();
+        };
     }, []);
 
     const clearCanvas = function (){
-        myp5.current.clear()
+        myp5.current.clear();
+        socket.current.emit('drawEvent', { type: 'clear' });
     };
 
     return (
