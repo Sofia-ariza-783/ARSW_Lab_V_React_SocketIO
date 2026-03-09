@@ -35,8 +35,7 @@ function App() {
                 lastY = undefined;
                 lastX = undefined;
             }
-        }
-
+        };
     };
 
     useEffect(() => {
@@ -44,6 +43,10 @@ function App() {
             myp5.current = new p5(sketch,"container");
         }
     }, []);
+
+    const clearCanvas = function (){
+        myp5.current.clear()
+    };
 
     return (
         <div>
@@ -55,6 +58,11 @@ function App() {
                 <hr/>
                 <div id="container"></div>
                 <hr/>
+
+                <button className="eraseButton"
+                        onClick={clearCanvas}>
+                    Clear
+                </button>
             </main>
         </div>
     );
