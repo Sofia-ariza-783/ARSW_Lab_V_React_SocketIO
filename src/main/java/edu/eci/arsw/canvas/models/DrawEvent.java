@@ -9,4 +9,7 @@ public class DrawEvent {
     private double y2;
     private String color;
 
+    public String getType() {
+        return type;
+    }
 }

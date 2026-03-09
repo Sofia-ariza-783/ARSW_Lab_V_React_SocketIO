@@ -19,11 +19,7 @@ public class CanvasBroadcastServer {
         config.setHostname("0.0.0.0");
         config.setPort(9092);
 
-        // Para navegador (polling) suele requerir CORS, sobre todo en dev. [2](https://github.com/socketio4j/netty-socketio)
         config.setOrigin("*");
-
-        // Si tu versión lo soporta, también puedes habilitar CORS explícito (release lo menciona). [3](https://www.youtube.com/watch?v=VSR0S8aHAkc)
-        // config.setEnableCors(true);
 
         final SocketIOServer server = new SocketIOServer(config);
 
@@ -40,9 +36,7 @@ public class CanvasBroadcastServer {
         });
 
         server.addEventListener("drawEvent", DrawEvent.class, new DataListener<DrawEvent>() {
-            public void onData(SocketIOClient sender, DrawEvent data, AckRequest ackRequest) {
-                System.out.println("Dibujando");
-                UUID senderId = sender.getSessionId();
+            public void onData(SocketIOClient sender, DrawEvent data, AckRequest ackRequest) {                UUID senderId = sender.getSessionId();
                 for (SocketIOClient client : server.getAllClients()) {
                     if (!client.getSessionId().equals(senderId)) {
                         client.sendEvent("drawBroadcast", data);
