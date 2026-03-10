@@ -44,7 +44,7 @@ function App() {
     };
 
     useEffect(() => {
-        socket.current = io('http://localhost:9092');
+        socket.current = io('http://3.17.173.82:9092');
         socket.current.on('drawBroadcast', (data) => {
             if (data.type === 'draw') {
                 myp5.current.stroke(data.color);
